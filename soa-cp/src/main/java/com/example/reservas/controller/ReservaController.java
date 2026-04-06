@@ -35,18 +35,21 @@ public class ReservaController {
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Reserva> criar(@Valid @RequestBody ReservaRequest request) {
-        // Carrega a sala antes de montar a reserva
-        Sala sala = salaService.buscarPorId(request.getSalaId());
+
+        Sala sala = salaService.buscarPorId(request.salaId());
+
         Reserva reserva = new Reserva(
                 sala,
-                request.getNomeSolicitante(),
-                request.getEmail(),
-                request.getData(),
-                request.getHoraInicio(),
-                request.getHoraFim(),
-                request.getFinalidade()
+                request.nomeSolicitante(),
+                request.email(),
+                request.data(),
+                request.horaInicio(),
+                request.horaFim(),
+                request.finalidade()
         );
+
         Reserva criada = reservaService.criarReserva(reserva);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(criada);
     }
 
