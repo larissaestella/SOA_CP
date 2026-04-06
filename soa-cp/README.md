@@ -69,6 +69,19 @@ A documentação da API é gerada automaticamente pelo SpringDoc e pode ser aces
 - Swagger UI: [`/swagger-ui.html`](http://localhost:8080/swagger-ui.html)
 - JSON OpenAPI: [`/v3/api-docs`](http://localhost:8080/v3/api-docs)
 
+## Banco de Dados (H2)
+
+A aplicação utiliza o banco de dados em memória H2.
+
+O console pode ser acessado em:
+
+- H2 Console: http://localhost:8080/h2-console
+
+Configurações de acesso:
+- JDBC URL: jdbc:h2:mem:reservas
+- User: sa
+- Password: (em branco)
+
 ## Diagrama Arquitetural
 
 O diagrama a seguir apresenta uma visão simplificada da arquitetura da solução. O cliente consome a API REST que expõe controladores. Os controladores delegam a lógica de negócio para os serviços, que por sua vez utilizam os repositórios para persistência. A camada de segurança intercepta as chamadas protegidas e o tratamento de erros padroniza as respostas. A persistência utiliza banco em memória H2.
