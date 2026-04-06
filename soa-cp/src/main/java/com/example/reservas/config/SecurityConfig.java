@@ -25,12 +25,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Ignora a proteção CSRF para o console do H2
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers(
-                                new AntPathRequestMatcher("/h2-console/**")
-                        )
-                )
+                // desabilita CSRF para simplificar chamadas de API
+                .csrf(csrf -> csrf.disable())
                 // Define as regras de acesso dos endpoints
                 .authorizeHttpRequests(auth -> auth
                         // Libera acesso ao console do H2
