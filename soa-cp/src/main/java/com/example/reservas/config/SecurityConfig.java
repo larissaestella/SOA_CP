@@ -2,22 +2,18 @@ package com.example.reservas.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-/**
- * Configurações de segurança da API.
- * Utiliza autenticação Basic em memória para proteger operações sensíveis.
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -29,23 +25,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // desabilita CSRF para simplificar chamadas de API
-                .csrf(csrf -> csrf.disable())
+                // Ignora a proteção CSRF para o console do H2
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(
+                                new AntPathRequestMatcher("/h2-console/**")
+                        )
+                )
+                // Define as regras de acesso dos endpoints
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos (consultas)
-                        .requestMatchers(HttpMethod.GET, "/salas/**", "/reservas/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/h2-console/**").permitAll()
-                        // Acesso a consola H2
-                        .requestMatchers("/h2-console/**").permitAll()
-                        // Todas as requisições POST e PUT em /reservas requerem autenticação
-                        .requestMatchers(HttpMethod.POST, "/reservas/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/reservas/**").authenticated()
-                        // Outros endpoints POST/PUT podem ser protegidos conforme necessidade
+                        // Libera acesso ao console do H2
+                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+                        // Libera acesso à documentação da API
+                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui.html")).permitAll()
+
+                        // Permite consultas públicas de salas e reservas
+                        .requestMatchers(new AntPathRequestMatcher("/salas/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/reservas/**", "GET")).permitAll()
+
+                        // Exige autenticação para criar ou alterar reservas
+                        .requestMatchers(new AntPathRequestMatcher("/reservas/**", "POST")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/reservas/**", "PUT")).authenticated()
+
+                        // Libera qualquer outra requisição não tratada acima
                         .anyRequest().permitAll()
                 )
-                // Configura autenticação HTTP Basic
+                // Usa autenticação HTTP Basic
                 .httpBasic(Customizer.withDefaults())
-                // Permite frames para o console H2
-                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+                // Permite que o console H2 seja exibido em frame no navegador
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                );
+
         return http.build();
     }
 
@@ -59,6 +71,7 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("senha123"))
                 .roles("USER")
                 .build();
+
         return new InMemoryUserDetailsManager(usuario);
     }
 
