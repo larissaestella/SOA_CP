@@ -26,4 +26,4 @@ public record ReservaRequest(
         LocalTime horaFim,
         @NotBlank(message = "Finalidade é obrigatória")
         String finalidade
-) 
+) {}
