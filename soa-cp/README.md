@@ -1,5 +1,11 @@
 # API de Reservas de Salas
 
+## **Integrantes**
+
+* **Beatriz Silva Pinheiro Rocha - RM553455**
+* **Larissa Estella Gonçalves dos Santos - RM552695**
+* **Rafael Alves do Nascimento - RM553117**
+
 Este projeto implementa uma API REST para gerenciar reservas de salas corporativas, seguindo os requisitos da disciplina de Arquitetura Orientada a Serviços (SOA). A aplicação foi desenvolvida em Java utilizando o **Spring Boot** com **Maven** e adota práticas recomendadas de arquitetura, tratamento de erros, segurança e documentação.
 
 ## Funcionalidades
@@ -135,13 +141,6 @@ soa-reservas-spring
     └── test
         └── java (vazio)
 ```
-
-## Participantes 
-
-Beatriz Silva Pinheiro Rocha - RM553455
-Larissa Estella Gonçalves dos Santos - RM552695
-Rafael Alves do Nascimento - RM553117
-
 ## Considerações Finais
 
 Esta implementação atende aos principais requisitos especificados no enunciado da prova: utilização correta de métodos HTTP, padronização de respostas, tratamento de erros, regras de negócio para reservas e salas, e proteção de operações sensíveis. Além disso, a documentação via Swagger e o diagrama arquitetural facilitam o entendimento e a evolução do projeto.
