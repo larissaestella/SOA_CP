@@ -73,7 +73,7 @@ A documentação da API é gerada automaticamente pelo SpringDoc e pode ser aces
 
 O diagrama a seguir apresenta uma visão simplificada da arquitetura da solução. O cliente consome a API REST que expõe controladores. Os controladores delegam a lógica de negócio para os serviços, que por sua vez utilizam os repositórios para persistência. A camada de segurança intercepta as chamadas protegidas e o tratamento de erros padroniza as respostas. A persistência utiliza banco em memória H2.
 
-![Diagrama arquitetural](diagram.png)
+![Diagrama arquitetural](diagrama.png)
 
 ## Como Executar
 
